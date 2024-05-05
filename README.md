@@ -15,3 +15,10 @@ The primary objective of YourTask is to empower users to manage their tasks effe
 - **Add Tasks:** Allow users to create new tasks by providing necessary details such as title and description.
 - **Edit Tasks:**  Provide functionality for users to modify existing tasks, updating information such as title or description.
 - **Delete Tasks:** Allow users to delete tasks they no longer need, removing them from the system permanently.
+
+## Database 🗃
+- The database includes tables for users, and tasks.
+- Each entity has unique identifiers and relevant attributes.
+- The System utilizes MySQL as the underlying database management system.<br> <br>
+Here is the EER model:
+![YourTaskDB](https://github.com/AsiaShalaldeh/YourTask/assets/103144415/ee3521e8-3d67-467c-9bfa-5a157b8c8a9a)
