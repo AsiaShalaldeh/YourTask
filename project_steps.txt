@@ -1,7 +1,7 @@
 == Steps to follow == 
 
-1. Flow chart to the moon and back
-2. Build endpoints (in Postman and as documentation)
+1. Flow charts to the moon and back
+2. Build endpoints 
 3. Build the database model
-4. Define the Architecture => layout the components/code structure/ authentication and authorization
+4. Define the architecture => layout the components/code structure/ authentication and authorization
 5. Build the code
