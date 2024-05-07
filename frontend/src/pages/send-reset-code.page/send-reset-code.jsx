@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useEmail } from '../../components/providers/email.provider';
+import { useEmail } from "../../components/providers/email.provider";
+import "./send-reset-code.css";
+import { TextField, Button, Typography } from "@mui/material";
 
 function SendResetCode() {
   const { setTempEmail } = useEmail();
@@ -20,10 +22,9 @@ function SendResetCode() {
         "http://127.0.0.1:8000/send-reset-code/",
         { email }
       );
-      // Get the email from the response
       const { email: responseEmail } = response.data;
 
-      // Set the email in context
+      // set the email in context
       setTempEmail(responseEmail);
       navigate("/verify-reset-code", { replace: true });
       setMessage(response.data.message);
@@ -39,21 +40,46 @@ function SendResetCode() {
   };
 
   return (
-    <div>
-      <h1>إعادة تعيين كلمة المرور</h1>
-      <form onSubmit={handleSubmit}>
-        <label>الإيميل</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
+    <div className="reset-container">
+      <div className="image-container">
+        <img
+          src={process.env.PUBLIC_URL + "images/forget password 1.png"}
+          alt="إعادة كلمة المرور"
         />
-        <button type="submit">متابعة</button>
-        هل تدكرت كلمة المرور؟ <Link to="/login">تسجيل الدخول</Link>
-        {error && <p>{error}</p>}
-        {message && <p>{message}</p>}
-      </form>
+        <h1>مل نسيت كمة المرور؟</h1>
+        <p>
+          {" "}
+          لا تقلق هذا يحدث احيانا, الرجاء ادخال بريدك الالكتروني في الحقل المخصص
+          وعند تاكيده سيتم إعادة تعيين كلمة المرور على بريدك الإلكتروني
+        </p>
+      </div>
+      <div className="reset-form">
+        <h1 className="title">إعادة تعيين كلمة المرور</h1>
+        <form onSubmit={handleSubmit}>
+          <label>البريد الإلكتروني</label>
+          <TextField
+            type="email"
+            variant="outlined"
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            margin="normal"
+            required
+          />
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            color="primary"
+            className="submit-button"
+          >
+            متابعة
+          </Button>
+          هل تدكرت كلمة المرور؟ <Link to="/login">تسجيل الدخول</Link>
+          {error && <p>{error}</p>}
+          {message && <p>{message}</p>}
+        </form>
+      </div>
     </div>
   );
 }

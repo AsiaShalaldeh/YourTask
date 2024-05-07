@@ -12,13 +12,14 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import axios from "axios";
+import "./register.form.css";
 
 function RegistrationForm() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [avatar, setAvatar] = useState(null); 
+  const [avatar, setAvatar] = useState(null);
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -31,7 +32,7 @@ function RegistrationForm() {
       formData.append("email", email);
       formData.append("password", password);
       if (avatar) {
-        formData.append("avatar", avatar); 
+        formData.append("avatar", avatar);
       }
 
       // Make a POST request to register a new user
@@ -62,19 +63,27 @@ function RegistrationForm() {
 
   const handleFileChange = (event) => {
     // update avatar state with selected image file
-    setAvatar(event.target.files[0]); 
+    setAvatar(event.target.files[0]);
   };
 
   return (
-    <Grid
-      container
-      justifyContent="center"
-      alignItems="center"
-      sx={{ height: "100vh" }}
-    >
-      <Grid item xs={12} sm={8} md={6} lg={4}>
-        <Paper elevation={3} sx={{ padding: "20px" }}>
-          <Typography variant="h5" align="center" gutterBottom>
+    <div className="register-container">
+      <div className="image-container">
+        <img
+          src={process.env.PUBLIC_URL + "images/sign up.png"}
+          alt="أهلا بك"
+        />
+        <h1>هيا لنبدأ رحلتك سويا</h1>
+        <p>قم بإنشاء حساب مجاني تماما في موقع مهمتك ودعنا نرتب مهامك سويا</p>
+      </div>
+      <div className="register-box">
+        <div className="register-content">
+          <Typography
+            variant="h5"
+            align="center"
+            gutterBottom
+            className="title"
+          >
             إنشاء حساب
           </Typography>
           <form onSubmit={handleSubmit}>
@@ -124,9 +133,23 @@ function RegistrationForm() {
               <p>يجب أن تتكون كلمة المرور على 8 رموز على الأقل</p>
               <p>يجب أن تحتوي كلمة المرور على رموز و أرقام</p>
             </div>
-            <label>الصورة الشخصية</label>
-            <input type="file" accept="image/*" onChange={handleFileChange} />
-            <Button type="submit" variant="contained" fullWidth color="primary">
+            <div>الصورة الشخصية اختياري</div>
+            <div className="image-profile">
+              <img
+                width={70}
+                height={70}
+                src={process.env.PUBLIC_URL + "images/profile.jpg"}
+                alt="User Profile"
+              />
+              <input type="file" accept="image/*" onChange={handleFileChange} />
+            </div>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              color="primary"
+              className="submit-button"
+            >
               إنشاء حساب
             </Button>
             {error && <Typography color="error">{error}</Typography>}
@@ -134,9 +157,9 @@ function RegistrationForm() {
           <Typography align="center" sx={{ marginTop: "20px" }}>
             لديك حساب بالفعل؟ <Link to="/login">تسجيل الدخول</Link>
           </Typography>
-        </Paper>
-      </Grid>
-    </Grid>
+        </div>
+      </div>
+    </div>
   );
 }
 

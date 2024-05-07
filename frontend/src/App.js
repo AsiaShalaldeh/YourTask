@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/login.page/login.form";
 import RegisterPage from "./pages/register.page/register.form";
@@ -8,6 +8,8 @@ import SendResetCode from "./pages/send-reset-code.page/send-reset-code";
 import VerifyResetCode from "./pages/verify_reset_code.page/verify_reset_code";
 import { EmailProvider } from "./components/providers/email.provider";
 import ResetPassword from "./pages/reset-password.page/reset-password";
+import { useNavigate } from "react-router-dom";
+
 
 function App() {
   return (

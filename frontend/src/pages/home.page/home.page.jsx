@@ -1,10 +1,12 @@
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useInRouterContext, useNavigate } from "react-router-dom";
 import { FiPlus } from "react-icons/fi";
 import axios from "axios";
+import "./home.page.css";
+import Navbar from "../../components/nav.component/nav.component";
 
-// When unautorized redirect to login: for all pages
+// When unauthorized redirect to login: for all pages
 
 function HomePage() {
   const navigate = useNavigate();
@@ -14,44 +16,22 @@ function HomePage() {
     setImage(localStorage.getItem("user_image"));
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      // Make a POST request to the logout endpoint
-      await axios.post(
-        "http://127.0.0.1:8000/logout/",
-        {
-          refresh_token: localStorage.getItem("refresh_token"),
-        },
-        { headers: { "Content-Type": "application/json" } },
-        { withCredentials: true }
-      );
-      localStorage.clear();
-      axios.defaults.headers.common["Authorization"] = null;
-      navigate("/login", { replace: true });
-    } catch (error) {
-      console.error("Logout error:", error.message);
-    }
-  };
-
   return (
-    <div>
-      <nav>
-        <div>{/* <img src="/logo.png" alt="Logo" /> */}</div>
-        <div>
-          <img src={`${image}`} alt="Profile" />
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      </nav>
-
-      <div>
-        {/* Image */}
-        {/* <img src="/home.png" alt="Home" /> */}
-
-        <Link to="/tasks">
-          <button>
+    <div className="home-container">
+      <Navbar/> 
+      <div className="body">
+        <h2>
+          لا يوجد مهام حتى الآن
+          <br /> دعنا نقوم بإضافة مهام جديدة
+        </h2>
+        <Link to="/tasks" className="link">
+          <button className="add-task">
             <FiPlus /> Add Tasks
           </button>
         </Link>
+        <div className="image">
+          <img src={process.env.PUBLIC_URL + "images/empty.png"} alt="Home" />
+        </div>
       </div>
     </div>
   );

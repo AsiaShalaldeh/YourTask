@@ -1,0 +1,9 @@
+.button {
+  background-color: #00939f;
+  color: white;
+}
+.del-image {
+  width: 100px;
+  height: 100px;
+  margin: 20px auto;
+}

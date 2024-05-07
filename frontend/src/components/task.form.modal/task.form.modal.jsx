@@ -1,9 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
 
 function TaskFormModal({ onSave, onCancel, task }) {
   const [formData, setFormData] = useState({
-    title: task ? task.title : "", 
-    description: task ? task.description : "", 
+    title: task ? task.title : "",
+    description: task ? task.description : "",
   });
 
   const handleChange = (e) => {
@@ -20,37 +28,38 @@ function TaskFormModal({ onSave, onCancel, task }) {
   };
 
   return (
-    <div>
-      <h2>{task ? "Edit Task" : "Add Task"}</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="title">Title:</label>
-          <input
-            type="text"
+    <Dialog open={true} onClose={onCancel}>
+      <DialogTitle>{task ? "Edit Task" : "Add Task"}</DialogTitle>
+      <DialogContent>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            autoFocus
+            margin="dense"
             id="title"
             name="title"
+            label="Title"
+            type="text"
+            fullWidth
             value={formData.title}
             onChange={handleChange}
           />
-        </div>
-        <div>
-          <label htmlFor="description">Description:</label>
-          <input
-            type="text"
+          <TextField
+            margin="dense"
             id="description"
             name="description"
+            label="Description"
+            type="text"
+            fullWidth
             value={formData.description}
             onChange={handleChange}
           />
-        </div>
-        <div>
-          <button type="submit">{task ? "Save" : "Add"}</button>
-          <button type="button" onClick={onCancel}>
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
+          <DialogActions>
+            <Button type="submit">{task ? "Save" : "Add"}</Button>
+            <Button onClick={onCancel}>Cancel</Button>
+          </DialogActions>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 

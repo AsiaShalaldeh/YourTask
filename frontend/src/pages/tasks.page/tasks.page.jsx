@@ -1,38 +1,34 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useEmail } from "../../components/providers/email.provider";
 import { FiFilter } from "react-icons/fi";
-import api from "../../interceptor/axios";
-import {useLocation} from 'react-router-dom';
+import { FiPlus } from "react-icons/fi";
+import {
+  Box,
+  Button,
+  Container,
+  InputAdornment,
+  TextField,
+  Typography,
+} from "@mui/material";
 import TaskFormModal from "../../components/task.form.modal/task.form.modal";
+import Navbar from "../../components/nav.component/nav.component";
+import TaskList from "../../components/task.list.component/task.list.component";
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import TaskFilter from "../../components/filter.component/filter.component";
 
 function TasksPage() {
-  const { email } = useEmail();
   const [tasks, setTasks] = useState([]);
-  const [newTaskTitle, setNewTaskTitle] = useState("");
-  const [newTaskDescription, setNewTaskDescription] = useState("");
-  const [editingTaskId, setEditingTaskId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalTask, setModalTask] = useState(null);
   const [searchStatus, setSearchStatus] = useState("all");
   const [searchText, setSearchText] = useState("");
-  const location = useLocation();
-
-  const handleAddTask = () => {
-    setShowModal(true);
-    setModalTask(null);
-  };
-
-  const handleEditTask = (taskId, task) => {
-    setShowModal(true);
-    setModalTask({ id: taskId, ...task });
-  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const tasksPerPage = 5;
 
   useEffect(() => {
     fetchTasks();
   }, []);
-
-  // use search params here
 
   const fetchTasks = async () => {
     try {
@@ -45,7 +41,6 @@ function TasksPage() {
 
   const handleDeleteTask = async (taskId) => {
     try {
-      console.log(taskId);
       await axios.delete(`http://127.0.0.1:8000/tasks/${taskId}/`);
       fetchTasks();
     } catch (error) {
@@ -53,13 +48,36 @@ function TasksPage() {
     }
   };
 
-  const handleSearchChange = (event) => {
+  // define debounce function
+  const debounce = (func, delay) => {
+    let timeoutId;
+    return (...args) => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+
+  // debounced search function
+  const debouncedSearch = debounce((text) => {
+    setSearchText(text);
+  }, 500);
+
+  const handleSearchTextChange = (event) => {
+    const { value } = event.target;
+    debouncedSearch(value);
+  };
+
+  const handleFilterChange = (event) => {
     setSearchStatus(event.target.value);
   };
 
-  const handleSearchTextChange = (event) => {
-    setSearchText(event.target.value);
-  };
+  //   const handleSearchTextChange = (event) => {
+  //     setSearchText(event.target.value);
+  //   };
 
   const filteredTasks = tasks.filter((task) => {
     const statusMatch =
@@ -73,7 +91,16 @@ function TasksPage() {
     return statusMatch && textMatch;
   });
 
-  // handle catching errors
+  const handleAddTask = () => {
+    setShowModal(true);
+    setModalTask(null);
+  };
+
+  const handleEditTask = (taskId, task) => {
+    setShowModal(true);
+    setModalTask({ id: taskId, ...task });
+  };
+
   const handleSaveTask = async (task) => {
     if (modalTask) {
       // Edit existing task
@@ -86,95 +113,70 @@ function TasksPage() {
     setShowModal(false);
   };
 
-  const handleChangeTaskStatus = async (updatedTask) => {
-    try {
-      console.log(updatedTask);
-      await axios.patch(
-        `http://127.0.0.1:8000/tasks/${updatedTask.task_id}/`,
-        updatedTask
-      );
-      fetchTasks();
-    } catch (error) {
-      console.error("Error updating task status:", error.message);
-    }
-  };
-
-  const handleCancel = () => {
+  const handleCloseModal = () => {
     setShowModal(false);
   };
 
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+
+  const indexOfLastTask = currentPage * tasksPerPage;
+  const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+  const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
+
   return (
     <div>
-      <h1>Tasks</h1>
-      <div>
-        {/* Filter by status */}
-        <FiFilter />
-        <select
-          id="searchStatus"
-          value={searchStatus}
-          onChange={handleSearchChange}
-        >
-          <option value="all">All</option>
-          <option value="completed">Completed</option>
-          <option value="notcompleted">Not Completed</option>
-        </select>
-      </div>
-      <div>
-        {/* Search input */}
-        <input
-          type="text"
-          placeholder="Search by task title or description"
-          value={searchText}
-          onChange={handleSearchTextChange}
-        />
-      </div>
-      <div>{/* Search input */}</div>
-      {/* Add Task button */}
-      <button onClick={handleAddTask}>Add Task</button>
-      {/* Task list */}
-      <table>
-        {/* Table headers */}
-        <tbody>
-          {filteredTasks.map((task) => (
-            <tr key={task.task_id}>
-              <td>{task.title}</td>
-              <td>{task.description}</td>
-              <td>
-                <select
-                  value={task.completed ? "completed" : "Not Completed"}
-                  onChange={(e) => {
-                    const updatedTask = {
-                      ...task,
-                      completed: e.target.value === "completed" ? true : false,
-                    };
-                    handleChangeTaskStatus(updatedTask);
-                  }}
-                >
-                  <option value="completed">Completed</option>
-                  <option value="Not Completed">Not Completed</option>
-                </select>
-              </td>
-              <td>
-                {/* Edit button */}
-                <button onClick={() => handleEditTask(task.task_id, task)}>
-                  Edit
-                </button>
-              </td>
-              <td>
-                {/* Delete button */}
-                <button onClick={() => handleDeleteTask(task.task_id)}>
-                  Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {/* Task form modal */}
+      <Navbar />
+      <Container>
+        <Box mt={4}>
+          <Box display="flex" alignItems="center" mb={2}>
+            <TaskFilter
+              searchStatus={searchStatus}
+              handleSearchChange={handleFilterChange}
+            />
+          </Box>
+          <Box mb={2}>
+            <TextField
+              type="text"
+              placeholder="Search by task title or description"
+              value={searchText}
+              onChange={handleSearchTextChange}
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Button
+                      variant="contained"
+                      onClick={handleAddTask}
+                      endIcon={<FiPlus style={{ marginRight: "15px" }} />}
+                    >
+                      Add Task
+                    </Button>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+          <TaskList
+            tasks={currentTasks}
+            onEditTask={handleEditTask}
+            onDeleteTask={handleDeleteTask}
+          />
+          <Stack spacing={2} mt={2} justifyContent="center" alignItems="center">
+            <Pagination
+              count={Math.ceil(filteredTasks.length / tasksPerPage)}
+              page={currentPage}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </Stack>
+        </Box>
+      </Container>
       {showModal && (
         <TaskFormModal
           onSave={handleSaveTask}
-          onCancel={handleCancel}
+          onCancel={handleCloseModal}
           task={modalTask}
         />
       )}

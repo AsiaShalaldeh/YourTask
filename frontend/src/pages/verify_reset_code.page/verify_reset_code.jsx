@@ -1,15 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEmail } from "../../components/providers/email.provider";
+import "./verify-reset-code.css";
+import { TextField, Button, Typography } from "@mui/material";
+import { Replay } from "@mui/icons-material";
 
 function VerifyResetCode() {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const { email: email, setTempEmail } = useEmail();
-  const codeInputs = useRef(
-    Array.from({ length: 6 }).map(() => React.createRef())
-  );
+  //   const codeInputs = useRef(
+  //     Array.from({ length: 6 }).map(() => React.createRef())
+  //   );
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [code, setCode] = useState(Array.from({ length: 6 }, () => ""));
@@ -59,31 +63,57 @@ function VerifyResetCode() {
   };
 
   return (
-    <div>
-      <h1>Verify Reset Code</h1>
-      <p>Email: {email}</p>
-      {/* <div>
-        {code.map((digit, index) => (
-          <input
-            key={index}
-            type="number"
-            value={digit}
-            onChange={(e) => handleInputChange(index, e.target.value)}
-            ref={codeInputs.current[index]}
-            style={{ width: "30px", marginRight: "5px" }}
-          />
-        ))}
-      </div> */}
-      <input
-        type="text"
-        placeholder="Enter code"
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-      />
-      <button onClick={handleResendCode}>إعادة الإرسال</button>
-      <button onClick={handleSubmit}>متابعة</button>
-      {success && <p>{success}</p>}
-      {error && <p>{error}</p>}
+    <div className="verify-container">
+      <div className="image-container">
+        <img
+          src={process.env.PUBLIC_URL + "images/forget password 2.png"}
+          alt="إعادة كلمة المرور"
+        />
+        <h1>التحقق من الرمز!</h1>
+        <p>
+          {" "}
+          لقد تم إرسال رمز إلى بريدك الإلكتروني. الرجاء كتابته في الحقول المخصصة
+          لبدء استرجاع كلمة المرور.
+        </p>
+      </div>
+      <div className="verify-form">
+        <h1>التحقق من الرمز</h1>
+        <p>قم بإدخال الرمز المرسلة إلى بريدك الإلكتروني {email}</p>
+        <TextField
+          type="text"
+          variant="outlined"
+          fullWidth
+          placeholder="Enter Code"
+          onChange={(e) => setCode(e.target.value)}
+          margin="normal"
+          required
+        />
+        <div>
+          <Button
+            onClick={handleResendCode}
+            endIcon={<Replay />}
+            variant="contained"
+            fullWidth
+            color="primary"
+            className="submit-button"
+          >
+            إعادة الإرسال
+          </Button>
+        </div>
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth
+          color="primary"
+          className="submit-button"
+          onClick={handleSubmit}
+        >
+          متابعة
+        </Button>
+        هل تدكرت كلمة المرور؟ <Link to="/login">تسجيل الدخول</Link>
+        {success && <p>{success}</p>}
+        {error && <p>{error}</p>}
+      </div>
     </div>
   );
 }
