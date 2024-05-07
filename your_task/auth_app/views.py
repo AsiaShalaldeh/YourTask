@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -14,8 +15,13 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import AccessToken
 from django.core.exceptions import ValidationError
 from django.contrib import messages
+from .models import UserImage
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from .serializers import UserSerializer, ResetCodeSerializer, LoginSerializer, VerifyResetCodeSerializer, ResetPasswordSerializer
 from .models import PasswordReset
@@ -33,9 +39,8 @@ def register(request):
             email = request.data.get('email')
             if User.objects.filter(email=email).exists():
                 return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
-
+            
             # Validate password complexity
-            # validate_password(value)
             password = request.data.get('password')
             try:
                 # Password must contain at least 8 characters, shouldn't be too common or entirely numeric.
@@ -45,9 +50,17 @@ def register(request):
                 return redirect('register')
 
             if serializer.is_valid():
-                # Hash the password before saving
-                serializer.validated_data['password'] = make_password(password)
+                serializer.validated_data['password'] = password
                 serializer.save()
+                
+                user = User.objects.get(email=email)
+                image_file = request.FILES.get('avatar')
+
+                # Check if an image file was provided
+                if image_file:
+                    user_image = UserImage(image=image_file, user=user, caption="Profile Image")
+                    user_image.save()
+
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -64,22 +77,26 @@ def login(request):
         if serializer.is_valid():
             email = serializer.validated_data.get('email')
             password = serializer.validated_data.get('password')
-
             try:
                 # Authenticate user
-                user = authenticate(email=email, password=password)
-                # return Response({'message': f'Invalid email or password {user}'}, status=status.HTTP_200_OK)
+                entered_user = User.objects.filter(email=email).first()
+                user = authenticate(username=entered_user.username, password=password)
                 # user = User.objects.get(email=email)
                 if user is not None:
                     # User authenticated successfully
-                    refresh = RefreshToken.for_user(user)
+                    access_token = AccessToken.for_user(user)
+                    refresh_token = RefreshToken.for_user(user)
 
-                    # Set token expiration time to 5 minutes
-                    refresh.access_token.set_exp(lifetime=timedelta(minutes=5))
+                     # Get the user's image path
+                    user_image_path = None
+                    user_image = UserImage.objects.filter(user=user).first()
+                    if user_image:
+                        user_image_path = user_image.image.url
 
                     return Response({
-                        'message': 'Login successful',
-                        'refresh': str(refresh),
+                        "access_token" : str(access_token),
+                        "refresh_token" : str(refresh_token),
+                        'user_image': user_image_path
                     }, status=status.HTTP_200_OK)
                 else:
                     # Authentication failed

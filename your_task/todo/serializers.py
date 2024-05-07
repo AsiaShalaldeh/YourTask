@@ -9,9 +9,9 @@ class TaskSerializer(serializers.ModelSerializer):
 class TaskFormSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ('title', 'description')
+        fields = ('title', 'description', 'completed')
 
 class TaskTableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ('title', 'description', 'status')
+        fields = ('task_id','title', 'description', 'completed')

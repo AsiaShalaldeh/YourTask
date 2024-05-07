@@ -27,26 +27,56 @@ function LoginForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    try {
-      // Make a POST request to login
-      const response = await axios.post("http://127.0.0.1:8000/login/", {
-        email,
-        password,
-      });
+    fetch("http://127.0.0.1:8000/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json" 
+      },
+      body: JSON.stringify({ 
+        email: email,
+        password: password
+      })
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        const accessToken = data.access_token;
+        localStorage.clear();
+        localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('refresh_token', data.refresh_token);
+        console.log(accessToken)
+        axios.defaults.headers.common['Authorization'] = 
+                                         `Bearer ${accessToken}`;
 
-      console.log("Login successful:", response.data);
+         // Store the image in local storage
+         localStorage.setItem('user_image', data.user_image);
 
-      // redirect user to the home page
-      navigate("/", { replace: true });
-    } catch (error) {
-      if (error.response && error.response.data && error.response.data.detail) {
-        console.error("Login error:", error.response.data.detail);
-        setError(error.response.data.detail);
-      } else {
-        console.error("Network error:", error.message);
-        setError("حدث خطأ في الشبكة. الرجاء المحاولة مرة أخرى لاحقًا.");
-      }
-    }
+        navigate("/", { replace: true });
+      })
+      .catch((error) => console.error("Error logging in:", error));
+    // try {
+    //   // Make a POST request to login
+    //   const response = await axios.post("http://127.0.0.1:8000/login/", {
+    //     email,
+    //     password,
+    //   });
+    //   localStorage.clear();
+    //   localStorage.setItem('access_token', response.json().data.access_token);
+    //   localStorage.setItem('refresh_token', response.json().data.refresh_token);
+    //   axios.defaults.headers.common['Authorization'] =
+    //                                      `Bearer ${response.data.access_token}`;
+    //   console.log("Login successful:", response.data);
+
+    //   // redirect user to home page
+    //   navigate("/", { replace: true });
+    // } catch (error) {
+    //   if (error.response && error.response.data && error.response.data.detail) {
+    //     console.error("Login error:", error.response.data.detail);
+    //     setError(error.response.data.detail);
+    //   } else {
+    //     console.error("Network error:", error.message);
+    //     setError("حدث خطأ في الشبكة. الرجاء المحاولة مرة أخرى لاحقًا.");
+    //   }
+    // }
   };
 
   return (

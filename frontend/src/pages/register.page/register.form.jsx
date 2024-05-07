@@ -18,6 +18,7 @@ function RegistrationForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [avatar, setAvatar] = useState(null); 
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -25,12 +26,24 @@ function RegistrationForm() {
     event.preventDefault();
 
     try {
+      const formData = new FormData();
+      formData.append("username", username);
+      formData.append("email", email);
+      formData.append("password", password);
+      if (avatar) {
+        formData.append("avatar", avatar); 
+      }
+
       // Make a POST request to register a new user
-      const response = await axios.post("http://127.0.0.1:8000/register/", {
-        username,
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:8000/register/",
+        formData,
+        {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        }
+      );
 
       console.log("Registration successful:", response.data);
 
@@ -46,6 +59,12 @@ function RegistrationForm() {
       }
     }
   };
+
+  const handleFileChange = (event) => {
+    // update avatar state with selected image file
+    setAvatar(event.target.files[0]); 
+  };
+
   return (
     <Grid
       container
@@ -105,6 +124,8 @@ function RegistrationForm() {
               <p>يجب أن تتكون كلمة المرور على 8 رموز على الأقل</p>
               <p>يجب أن تحتوي كلمة المرور على رموز و أرقام</p>
             </div>
+            <label>الصورة الشخصية</label>
+            <input type="file" accept="image/*" onChange={handleFileChange} />
             <Button type="submit" variant="contained" fullWidth color="primary">
               إنشاء حساب
             </Button>
