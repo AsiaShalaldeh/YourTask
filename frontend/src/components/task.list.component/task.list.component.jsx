@@ -16,7 +16,7 @@ import {
   TableRow,
 } from "@mui/material";
 
-const TaskList = ({ tasks, onEditTask, onDeleteTask }) => {
+const TaskList = ({ tasks, onEditTask, onDeleteTask, onStatusUpdate }) => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
   const [taskIdToDelete, setTaskIdToDelete] = useState(null);
 
@@ -53,7 +53,20 @@ const TaskList = ({ tasks, onEditTask, onDeleteTask }) => {
                 <TableCell>{task.title}</TableCell>
                 <TableCell>{task.description}</TableCell>
                 <TableCell>
-                  {task.completed ? "Completed" : "Not Completed"}
+                  <select
+                    value={task.completed ? "completed" : "Not Completed"}
+                    onChange={(e) => {
+                      const updatedTask = {
+                        ...task,
+                        completed:
+                          e.target.value === "completed" ? true : false,
+                      };
+                      onStatusUpdate(updatedTask);
+                    }}
+                  >
+                    <option value="completed">Completed</option>
+                    <option value="Not Completed">Not Completed</option>
+                  </select>
                 </TableCell>
                 <TableCell>
                   <Button

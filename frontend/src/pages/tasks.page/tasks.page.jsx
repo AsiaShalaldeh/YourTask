@@ -121,6 +121,19 @@ function TasksPage() {
     setCurrentPage(value);
   };
 
+  const handleChangeTaskStatus = async (updatedTask) => {
+    try {
+      console.log(updatedTask);
+      await axios.patch(
+        `http://127.0.0.1:8000/tasks/${updatedTask.task_id}/`,
+        updatedTask
+      );
+      fetchTasks();
+    } catch (error) {
+      console.error("Error updating task status:", error.message);
+    }
+  };
+
   const indexOfLastTask = currentPage * tasksPerPage;
   const indexOfFirstTask = indexOfLastTask - tasksPerPage;
   const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
@@ -162,6 +175,7 @@ function TasksPage() {
             tasks={currentTasks}
             onEditTask={handleEditTask}
             onDeleteTask={handleDeleteTask}
+            onStatusUpdate={handleChangeTaskStatus}
           />
           <Stack spacing={2} mt={2} justifyContent="center" alignItems="center">
             <Pagination
