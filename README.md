@@ -18,11 +18,11 @@ The primary objective of YourTask is to empower users to manage their tasks effe
 - **Delete Tasks:** Allow users to delete tasks they no longer need, removing them from the system permanently.
 
 ## Database 🗃
-- The database includes tables for users, and tasks.
+- The database includes tables for users, tasks, reset passwords, and users images.
 - Each entity has unique identifiers and relevant attributes.
 - The System utilizes MySQL as the underlying database management system.
 - Some built in-tables are used too e.g. Token and users tables provided by Django<br> <br>
-Here is the EER model:<br>
+Here is the EER model:<br><br>
 ![YourTaskD](https://github.com/AsiaShalaldeh/YourTask/assets/103144415/9227c1c3-d409-43c0-8683-f63e28853b7c)
 
 
