@@ -1,16 +1,20 @@
 == YourTask Endpoints ==
 
 = Authentication Endpoints =
-POST /api/register 
-POST /api/login
-POST /api/logout 
-PATCH /api/reset-password
+POST /register
+POST /login
+POST /logout 
+POST /send-reset-code
+POST /verify-reset-code
+POST /reset-password
+POST /token
+POST /token/refresh
 
 
 = Task Endpoints =
-GET /api/tasks
-POST /api/tasks
-PATCH /api/tasks/{taskId}
-DELETE /api/tasks/{taskId}
-GET /api/tasks/search?status={status}
+GET /tasks
+POST /tasks
+PATCH /tasks/{taskId}
+DELETE /tasks/{taskId}
+GET /tasks/search?query={query}
 
