@@ -6,8 +6,6 @@ import axios from "axios";
 import "./home.page.css";
 import Navbar from "../../components/nav.component/nav.component";
 
-// When unauthorized redirect to login: for all pages
-
 function HomePage() {
   const navigate = useNavigate();
   const [image, setImage] = useState("");

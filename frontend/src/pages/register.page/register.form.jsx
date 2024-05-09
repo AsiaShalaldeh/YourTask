@@ -49,7 +49,7 @@ function RegistrationForm() {
       console.log("Registration successful:", response.data);
 
       // redirect user to the home page
-      navigate("/", { replace: true });
+      navigate("/home", { replace: true });
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
         console.error("Registration error:", error.response.data.error);

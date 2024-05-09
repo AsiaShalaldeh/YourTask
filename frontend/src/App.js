@@ -8,15 +8,17 @@ import SendResetCode from "./pages/send-reset-code.page/send-reset-code";
 import VerifyResetCode from "./pages/verify_reset_code.page/verify_reset_code";
 import { EmailProvider } from "./components/providers/email.provider";
 import ResetPassword from "./pages/reset-password.page/reset-password";
-import { useNavigate } from "react-router-dom";
-
+import { Navigate } from "react-router-dom";
+import Navbar from "./components/nav.component/nav.component";
 
 function App() {
   return (
     <EmailProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/*" element={<Navigate to="/login" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/tasks" element={<TasksPage />} />
