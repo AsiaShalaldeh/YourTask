@@ -11,16 +11,10 @@ function VerifyResetCode() {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const { email: email, setTempEmail } = useEmail();
-  //   const codeInputs = useRef(
-  //     Array.from({ length: 6 }).map(() => React.createRef())
-  //   );
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [code, setCode] = useState(Array.from({ length: 6 }, () => ""));
 
-  //   useEffect(() => {
-  //     codeInputs.current[0].current.focus();
-  //   }, []);
 
   const handleSubmit = async () => {
     try {
@@ -32,7 +26,7 @@ function VerifyResetCode() {
       setSuccess(response.data.success);
     } catch (error) {
       console.error(error);
-      //   setError(error.response.data.error);
+      setError(error.response.data.error);
     }
   };
 
@@ -88,6 +82,8 @@ function VerifyResetCode() {
           margin="normal"
           required
         />
+        {error && <Typography color="error">{error}</Typography>}
+        {success && <Typography color="success">{success}</Typography>}
         <div>
           <Button
             onClick={handleResendCode}
@@ -111,8 +107,6 @@ function VerifyResetCode() {
           متابعة
         </Button>
         هل تدكرت كلمة المرور؟ <Link to="/login">تسجيل الدخول</Link>
-        {success && <p>{success}</p>}
-        {error && <p>{error}</p>}
       </div>
     </div>
   );

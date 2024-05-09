@@ -42,7 +42,12 @@ function LoginForm() {
         password: password,
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Invalid email or password");
+        }
+        return response.json();
+      })
       .then((data) => {
         const accessToken = data.access_token;
         localStorage.clear();
@@ -58,7 +63,9 @@ function LoginForm() {
 
         navigate("/tasks", { replace: true });
       })
-      .catch((error) => console.error("Error logging in:", error));
+      .catch((error) => {
+        setError(error.message);
+      });
   };
 
   return (
@@ -105,6 +112,15 @@ function LoginForm() {
                   ),
                 }}
               />
+              {error && (
+                <Typography
+                  variant="body2"
+                  color="error"
+                  className="error-message"
+                >
+                  {error}
+                </Typography>
+              )}
               <Typography align="center" sx={{ marginTop: "20px" }}>
                 <Link to="/send-reset-code">نسيت كلمة المرور؟</Link>
               </Typography>
@@ -113,11 +129,9 @@ function LoginForm() {
                 type="submit"
                 variant="contained"
                 fullWidth
-                // color="primary"
               >
                 تسجيل الدخول
               </Button>
-              {error && <Typography color="error">{error}</Typography>}
             </form>
             <Typography align="center" sx={{ marginTop: "20px" }}>
               ليس لديك حساب؟ <Link to="/register">إنشاء حساب</Link>

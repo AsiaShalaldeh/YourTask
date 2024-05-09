@@ -24,8 +24,6 @@ function ResetPassword() {
 
   const resetPassword = async () => {
     try {
-      console.log(password);
-      console.log(email);
       const response = await axios.post(
         "http://127.0.0.1:8000/reset-password/",
         {
@@ -34,11 +32,11 @@ function ResetPassword() {
         }
       );
       navigate("/login", { replace: true });
-      setSuccess(response.data.success);
+      // setSuccess(response.data.success);
       setError("");
     } catch (error) {
-      setError(error.response.data.error);
-      setSuccess("");
+      if (error.response && error.response.data && error.response.data.error)
+        setError(error.response.data.error);
     }
   };
 
@@ -66,6 +64,7 @@ function ResetPassword() {
             }}
           />
         </div>
+        {error && <Typography color="error">{error}</Typography>}
         <div className="instructions">
           <p>يجب أن تتكون كلمة المرور على 8 رموز على الأقل</p>
           <p>يجب أن تحتوي كلمة المرور على رموز و أرقام</p>
@@ -80,8 +79,6 @@ function ResetPassword() {
           إعادة تعيين كلمة المرور
         </Button>
         هل تدكرت كلمة المرور؟ <Link to="/login">تسجيل الدخول</Link>
-        {success && <p>{success}</p>}
-        {error && <p>{error}</p>}
       </div>
       <div className="image-container">
         <img

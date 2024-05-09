@@ -11,33 +11,30 @@ function SendResetCode() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     try {
       // Make a POST request to send reset code
+      console.log(email)
       const response = await axios.post(
         "http://127.0.0.1:8000/send-reset-code/",
         { email }
       );
       const { email: responseEmail } = response.data;
-
+  
       // set the email in context
       setTempEmail(responseEmail);
       navigate("/verify-reset-code", { replace: true });
-      setMessage(response.data.message);
-      setError("");
     } catch (error) {
-      setMessage("");
       if (error.response && error.response.data && error.response.data.error) {
         setError(error.response.data.error);
       } else {
-        setError("A network error occurred. Please try again later.");
+        setError("البريد الإلكتروني غير موجود.");
       }
     }
-  };
+  };  
 
   return (
     <div className="reset-container">
@@ -66,6 +63,7 @@ function SendResetCode() {
             margin="normal"
             required
           />
+          {error && <Typography color="error">{error}</Typography>}{" "}
           <Button
             type="submit"
             variant="contained"
@@ -76,8 +74,6 @@ function SendResetCode() {
             متابعة
           </Button>
           هل تدكرت كلمة المرور؟ <Link to="/login">تسجيل الدخول</Link>
-          {error && <p>{error}</p>}
-          {message && <p>{message}</p>}
         </form>
       </div>
     </div>

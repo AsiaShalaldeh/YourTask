@@ -46,8 +46,7 @@ def register(request):
                 # Password must contain at least 8 characters, shouldn't be too common or entirely numeric.
                 validate_password(password)
             except ValidationError as error:
-                messages.error(request, ' '.join(error.messages))
-                return redirect('register')
+                return Response({'error': 'كلمة السر يجب أن تحتوي على حروف وأرقام ورموز.'}, status=status.HTTP_400_BAD_REQUEST)
 
             if serializer.is_valid():
                 serializer.validated_data['password'] = password
@@ -100,7 +99,7 @@ def login(request):
                     }, status=status.HTTP_200_OK)
                 else:
                     # Authentication failed
-                    return Response({'message': 'Invalid email or password'}, status=status.HTTP_401_UNAUTHORIZED)
+                    return Response({'message': 'كلمة المرور أو الإيميل غير صحيحة'}, status=status.HTTP_401_UNAUTHORIZED)
             except Exception as e:
                 # Log out the user if an error occurs
                 logout(request)
@@ -138,27 +137,14 @@ def send_reset_code(request):
         serializer = ResetCodeSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data['email']
-            try:
-                validate_email(email)
-            except ValidationError:
-                return Response({'error': 'Invalid email'}, status=400)
+        if not User.objects.filter(email=email, is_active=True).exists():
+            return Response({'error': f'البريد الإلكتروني غير موجود. {email} '}, status=status.HTTP_400_BAD_REQUEST)
+        password_reset, created = PasswordReset.objects.get_or_create(email=email)
+        password_reset.code = get_random_string(length=6, allowed_chars='1234567890')
+        password_reset.save()
+        send_reset_code_email(password_reset)
 
-            password_reset, created = PasswordReset.objects.get_or_create(email=email)
-            # if not created and password_reset.is_valid():
-            #     # If a valid code already exists for this email, resend it
-            #     send_reset_code_email(password_reset)
-            # else:
-            #     # If a new code is generated or the old code expired, send a new one
-            #     password_reset.code = get_random_string(length=6, allowed_chars='1234567890')
-            #     password_reset.save()
-            #     send_reset_code_email(password_reset)
-            password_reset.code = get_random_string(length=6, allowed_chars='1234567890')
-            password_reset.save()
-            send_reset_code_email(password_reset)
-
-            return Response({'success': 'Reset code sent', 'email': email})
-        else:
-            return Response(serializer.errors, status=400)
+        return Response({'success': 'Reset code sent', 'email': email}, status=status.HTTP_200_OK)
 
     return Response({'error': 'Method not allowed'}, status=405)
 
@@ -178,17 +164,16 @@ def verify_reset_code(request):
             code = serializer.validated_data['code']
 
             if not email or not code:
-                return Response({'error': 'Email and code are required'}, status=400)
-
-            password_reset = get_object_or_404(PasswordReset, email=email, code=code)
-
-            # add expire date later is.valid()
-            if password_reset is not None:
-                return Response({'success': 'Code is valid'})
+                return Response({'error': 'Email and code are required'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if not PasswordReset.objects.filter(email=email, code=code).exists():
+                return Response({'error': f'الرمز غير صحيح.'}, status=status.HTTP_400_BAD_REQUEST)
             else:
-                return Response({'error': 'Code is invalid'}, status=400)
-
-    return Response({'error': 'Method not allowed'}, status=405)
+                return Response({'success': 'الرمز صحيح'}, status=status.HTTP_200_OK) 
+        else:
+            return Response(serializer.errors, status=400)
+    else:
+        return Response({'error': 'Method not allowed'}, status=405)
 
 
 @api_view(('POST',))
@@ -203,14 +188,14 @@ def reset_password(request):
                 # Password must contain at least 8 characters, shouldn't be too common or entirely numeric.
                 validate_password(new_password)
             except ValidationError as error:
-                return Response({'error': 'Password is not complex enough', 'message': error.messages}, status=400)        
+                return Response({'error': 'كلمة السر يجب أن تحتوي على حروف وأرقام ورموز.'}, status=status.HTTP_400_BAD_REQUEST)
 
             # Reset the user's password
             user = User.objects.get(email=email)
             user.set_password(make_password(new_password))
             user.save()
 
-            return Response({'success': 'Password reset successful'})
+            return Response({'success': 'Password reset successful'}, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=400)
 
