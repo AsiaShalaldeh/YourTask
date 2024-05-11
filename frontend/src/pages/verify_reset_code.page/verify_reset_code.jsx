@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -9,7 +9,7 @@ import { Replay } from "@mui/icons-material";
 
 function VerifyResetCode() {
   const navigate = useNavigate();
-  const [message, setMessage] = useState("");
+  const [setMessage] = useState("");
   const { email: email, setTempEmail } = useEmail();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -60,7 +60,7 @@ function VerifyResetCode() {
     <div className="verify-container">
       <div className="image-container">
         <img
-          src={process.env.PUBLIC_URL + "images/forget password 2.png"}
+          src={process.env.PUBLIC_URL + "images/forget_password2.png"}
           alt="إعادة كلمة المرور"
         />
         <h1>التحقق من الرمز!</h1>

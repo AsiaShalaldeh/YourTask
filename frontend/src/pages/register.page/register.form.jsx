@@ -5,8 +5,6 @@ import {
   TextField,
   Button,
   Typography,
-  Grid,
-  Paper,
   IconButton,
   InputAdornment,
 } from "@mui/material";
@@ -46,9 +44,19 @@ function RegistrationForm() {
         }
       );
 
-      console.log("Registration successful:", response.data);
+      const data = response.data;
+  
+      const accessToken = data.access_token;
+      localStorage.clear();
+      localStorage.setItem("access_token", accessToken);
+      localStorage.setItem("refresh_token", data.refresh_token);
+      console.log(accessToken);
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${accessToken}`;
+  
+      localStorage.setItem("user_image", data.user_image);
 
-      // redirect user to the home page
       navigate("/home", { replace: true });
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
@@ -56,7 +64,7 @@ function RegistrationForm() {
         setError(error.response.data.error);
       } else {
         console.error("Network error:", error.message);
-        setError("حدث خطأ في الشبكة. الرجاء المحاولة مرة أخرى لاحقًا.");
+        setError("");
       }
     }
   };
@@ -70,7 +78,7 @@ function RegistrationForm() {
     <div className="register-container">
       <div className="image-container">
         <img
-          src={process.env.PUBLIC_URL + "images/sign up.png"}
+          src={process.env.PUBLIC_URL + "images/sign_up.png"}
           alt="أهلا بك"
         />
         <h1>هيا لنبدأ رحلتك سويا</h1>

@@ -37,7 +37,7 @@ def register(request):
 
             # Validate email uniqueness
             email = request.data.get('email')
-            if User.objects.filter(email=email).exists():
+            if email and User.objects.filter(email=email).exists():
                 return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
             
             # Validate password complexity
@@ -51,6 +51,7 @@ def register(request):
             if serializer.is_valid():
                 serializer.validated_data['password'] = password
                 serializer.save()
+            
                 
                 user = User.objects.get(email=email)
                 image_file = request.FILES.get('avatar')
@@ -60,7 +61,15 @@ def register(request):
                     user_image = UserImage(image=image_file, user=user, caption="Profile Image")
                     user_image.save()
 
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                # User authenticated successfully
+                access_token = AccessToken.for_user(user)
+                refresh_token = RefreshToken.for_user(user)
+                
+                return Response({
+                        "access_token" : str(access_token),
+                        "refresh_token" : str(refresh_token),
+                        # 'user_image': user_image_path
+                    }, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
@@ -99,7 +108,7 @@ def login(request):
                     }, status=status.HTTP_200_OK)
                 else:
                     # Authentication failed
-                    return Response({'message': 'كلمة المرور أو الإيميل غير صحيحة'}, status=status.HTTP_401_UNAUTHORIZED)
+                    return Response({'message': 'كلمة المرور أو الإيميل غير صحيحة'}, status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
                 # Log out the user if an error occurs
                 logout(request)

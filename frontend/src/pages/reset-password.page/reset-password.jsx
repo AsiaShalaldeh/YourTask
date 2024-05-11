@@ -12,7 +12,6 @@ function ResetPassword() {
   const { email: email } = useEmail();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -32,7 +31,6 @@ function ResetPassword() {
         }
       );
       navigate("/login", { replace: true });
-      // setSuccess(response.data.success);
       setError("");
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error)
@@ -82,7 +80,7 @@ function ResetPassword() {
       </div>
       <div className="image-container">
         <img
-          src={process.env.PUBLIC_URL + "images/forget password 3.png"}
+          src={process.env.PUBLIC_URL + "images/forget_password3.png"}
           alt="إعادة كلمة المرور"
         />
         <h1>أنت تبلي حسنا</h1>

@@ -17,7 +17,6 @@ function SendResetCode() {
   
     try {
       // Make a POST request to send reset code
-      console.log(email)
       const response = await axios.post(
         "http://127.0.0.1:8000/send-reset-code/",
         { email }
@@ -40,7 +39,7 @@ function SendResetCode() {
     <div className="reset-container">
       <div className="image-container">
         <img
-          src={process.env.PUBLIC_URL + "images/forget password 1.png"}
+          src={process.env.PUBLIC_URL + "images/forget_password1.png"}
           alt="إعادة كلمة المرور"
         />
         <h1>مل نسيت كمة المرور؟</h1>

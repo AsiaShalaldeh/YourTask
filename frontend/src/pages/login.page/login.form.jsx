@@ -6,13 +6,10 @@ import {
   TextField,
   Button,
   Typography,
-  Grid,
-  Paper,
   IconButton,
   InputAdornment,
 } from "@mui/material";
 import {
-  Diversity1Sharp,
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
@@ -31,41 +28,31 @@ function LoginForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    fetch("http://127.0.0.1:8000/login/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+  
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/login/", {
         email: email,
         password: password,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Invalid email or password");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const accessToken = data.access_token;
-        localStorage.clear();
-        localStorage.setItem("access_token", accessToken);
-        localStorage.setItem("refresh_token", data.refresh_token);
-        console.log(accessToken);
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${accessToken}`;
-
-        // Store the image in local storage
-        localStorage.setItem("user_image", data.user_image);
-
-        navigate("/tasks", { replace: true });
-      })
-      .catch((error) => {
-        setError(error.message);
       });
+  
+      const data = response.data;
+  
+      const accessToken = data.access_token;
+      localStorage.clear();
+      localStorage.setItem("access_token", accessToken);
+      localStorage.setItem("refresh_token", data.refresh_token);
+      console.log(accessToken);
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${accessToken}`;
+  
+      // Store the image in local storage
+      localStorage.setItem("user_image", data.user_image);
+  
+      navigate("/tasks", { replace: true });
+    } catch (error) {
+      setError(error.response.data.message);
+    }
   };
 
   return (
@@ -141,7 +128,7 @@ function LoginForm() {
       </div>
       <div className="image-container">
         <img
-          src={process.env.PUBLIC_URL + "images/sign in.png"}
+          src={process.env.PUBLIC_URL + "images/sign_in.png"}
           alt="أهلا بك"
         />
         <h1>مرحبا بك في موقع مهمتك</h1>

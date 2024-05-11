@@ -49,6 +49,39 @@ Here is the EER model:<br><br>
 - **Visual Studio Code**: Used for writing code, debugging, and version control.
 
 
+## Setup
+
+1. **Download or Clone the Repository:**
+   ```
+   git clone https://github.com/AsiaShalaldeh/YourTask.git 
+   ```
+
+2. **Install Django and Dependencies:**
+   ```
+   cd your_task
+   pip install -r requirements.txt
+   ```
+
+3. **Run the Django App:**
+   ```
+   python manage.py runserver
+   ```
+
+4. **Install React Dependencies:**
+   ```
+   cd frontend
+   npm install
+   ```
+
+6. **Run the React App:**
+   ```
+   npm start
+   ```
+
+### Notes
+- Make sure you have Python and Node.js installed on your system before proceeding.
+- The `requirements.txt` file contains all the necessary Python dependencies.
+
 
 ## Contribution 👩‍💻
 We welcome contributions from the community to enhance the YourTask System.

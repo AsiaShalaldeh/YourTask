@@ -9,15 +9,16 @@ from django.contrib.auth.models import User
 
 
 @api_view(('GET','POST'))
-# @permission_classes([IsAuthenticated])
-# @authentication_classes([TokenAuthentication])  
 def get_add_tasks(request):
     if request.method == 'GET':
-        # Retrieve tasks associated with the logged-in user
-        tasks = Task.objects.filter(user=request.user)
-        # tasks = Task.objects.all()
-        serializer = TaskTableSerializer(tasks, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if request.user.is_authenticated:
+            # Retrieve tasks associated with the logged-in user
+            tasks = Task.objects.filter(user=request.user)
+            # tasks = Task.objects.all()
+            serializer = TaskTableSerializer(tasks, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "User is not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
 
     elif request.method == 'POST':
         if request.user.is_authenticated:
@@ -35,7 +36,6 @@ def get_add_tasks(request):
     
 
 @api_view(('PATCH','DELETE'))
-# @permission_classes([IsAuthenticated])
 def update_delete_task(request, task_id):
     if request.method == "PATCH":
         # Update an existing task for the logged-in user
