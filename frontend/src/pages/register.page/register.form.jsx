@@ -45,17 +45,16 @@ function RegistrationForm() {
       );
 
       const data = response.data;
-  
+
       const accessToken = data.access_token;
       localStorage.clear();
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", data.refresh_token);
-      console.log(accessToken);
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${accessToken}`;
-  
-      localStorage.setItem("user_image", data.user_image);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+      if (data.user_image) {
+        localStorage.setItem("user_image", data.user_image);
+      }
 
       navigate("/home", { replace: true });
     } catch (error) {
@@ -141,15 +140,27 @@ function RegistrationForm() {
               <p>يجب أن تتكون كلمة المرور على 8 رموز على الأقل</p>
               <p>يجب أن تحتوي كلمة المرور على رموز و أرقام</p>
             </div>
-            <div>الصورة الشخصية اختياري</div>
+            <div className="image-title">
+              الصورة الشخصية <span>(اختياري)</span>
+            </div>
             <div className="image-profile">
               <img
                 width={70}
                 height={70}
-                src={process.env.PUBLIC_URL + "images/profile.jpg"}
+                src={process.env.PUBLIC_URL + "images/profile.png"}
                 alt="User Profile"
               />
-              <input type="file" accept="image/*" onChange={handleFileChange} />
+              <div className="fileUpload btn btn-primary">
+                <button className="upload-image">
+                  <input
+                    name="Image"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                  إرفاق صورة
+                </button>
+              </div>
             </div>
             <Button
               type="submit"
@@ -163,7 +174,7 @@ function RegistrationForm() {
             {error && <Typography color="error">{error}</Typography>}
           </form>
           <Typography align="center" sx={{ marginTop: "20px" }}>
-            لديك حساب بالفعل؟ <Link to="/login">تسجيل الدخول</Link>
+            &nbsp;هل لديك حساب بالفعل؟ <Link to="/login" className="login-link"><span>تسجيل الدخول</span></Link>
           </Typography>
         </div>
       </div>

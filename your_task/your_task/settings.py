@@ -99,7 +99,7 @@ DATABASES = {
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000'
-    # '*' 
+    # '*' to allow all origins (not recommended for production)
 ]
 
 # Password validation

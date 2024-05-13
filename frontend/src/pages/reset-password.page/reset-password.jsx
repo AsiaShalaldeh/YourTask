@@ -76,7 +76,12 @@ function ResetPassword() {
         >
           إعادة تعيين كلمة المرور
         </Button>
-        هل تدكرت كلمة المرور؟ <Link to="/login">تسجيل الدخول</Link>
+        <Typography align="center" sx={{ marginTop: "20px" }} className="link">
+          &nbsp;هل تدكرت كلمة المرور؟&nbsp;
+          <Link to="/login" className="login-link">
+            <span>تسجيل الدخول</span>
+          </Link>
+        </Typography>
       </div>
       <div className="image-container">
         <img

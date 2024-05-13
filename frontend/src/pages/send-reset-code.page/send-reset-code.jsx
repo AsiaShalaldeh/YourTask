@@ -14,7 +14,7 @@ function SendResetCode() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
       // Make a POST request to send reset code
       const response = await axios.post(
@@ -22,7 +22,7 @@ function SendResetCode() {
         { email }
       );
       const { email: responseEmail } = response.data;
-  
+
       // set the email in context
       setTempEmail(responseEmail);
       navigate("/verify-reset-code", { replace: true });
@@ -33,7 +33,7 @@ function SendResetCode() {
         setError("البريد الإلكتروني غير موجود.");
       }
     }
-  };  
+  };
 
   return (
     <div className="reset-container">
@@ -50,30 +50,34 @@ function SendResetCode() {
         </p>
       </div>
       <div className="reset-form">
-        <h1 className="title">إعادة تعيين كلمة المرور</h1>
-        <form onSubmit={handleSubmit}>
-          <label>البريد الإلكتروني</label>
-          <TextField
-            type="email"
-            variant="outlined"
-            fullWidth
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            margin="normal"
-            required
-          />
-          {error && <Typography color="error">{error}</Typography>}{" "}
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            color="primary"
-            className="submit-button"
-          >
-            متابعة
-          </Button>
-          هل تدكرت كلمة المرور؟ <Link to="/login">تسجيل الدخول</Link>
-        </form>
+        <div className="content">
+          <h1 className="title">إعادة تعيين كلمة المرور</h1>
+          <form onSubmit={handleSubmit}>
+            <label>البريد الإلكتروني</label>
+            <TextField
+              className="email-field"
+              type="email"
+              variant="outlined"
+              fullWidth
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              margin="normal"
+              required
+            />
+            {error && <Typography color="error">{error}</Typography>}{" "}
+            <Button
+              className="submit-button"
+              type="submit"
+              variant="contained"
+              fullWidth
+            >
+              متابعة
+            </Button>
+            <Typography align="center" sx={{ marginTop: "20px" }} className="link">
+            &nbsp;هل تدكرت كلمة المرور؟&nbsp;<Link to="/login" className="login-link"><span>تسجيل الدخول</span></Link>
+          </Typography>
+          </form>
+        </div>
       </div>
     </div>
   );

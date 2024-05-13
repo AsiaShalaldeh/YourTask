@@ -5,31 +5,36 @@ html {
   margin: 0;
   padding: 0;
   width: 100%;
+  direction: rtl;
 }
 .login-container {
   display: flex;
   justify-content: space-between;
-  /* align-items: center; */
   flex-wrap: wrap;
 }
 .login-box,
 .image-container {
   flex: 1 1 40%;
 }
+.login-container > .container {
+  width: 50%;
+}
+
+/* CSS rules for mobile devices */
 @media screen and (max-width: 600px) {
+  .login-container > .container {
+    width: 100%;
+  }
   .login-box,
   .image-container {
-    /* flex: 1 1 100%; */
     min-width: 100%;
   }
 }
-
 .image-container {
   flex: 1 1 auto;
   max-width: 50%;
   text-align: center;
 }
-
 .image-container img {
   max-width: 100%;
   height: auto;
@@ -43,21 +48,94 @@ html {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* padding: 25px; */
-  /* position: relative; */
+  padding: 20px;
+  gap: 10px;
 }
 .login-container > .image-container > img {
-  /* position: absolute; */
   max-width: 60%;
 }
-.login-container > .container {
-  width: 50%;
+.login-container .image-container .title {
+  /* height: 60px; */
+  flex-grow: 0;
+  font-size: 30px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+  color: #f7fafc;
+  margin: 0;
+  margin-top: 20px;
 }
+.login-container .image-container .desc {
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: center;
+  margin: 0;
+}
+
 .login-container > .container > .login-box {
   height: 100%;
   padding: 20px;
   font-size: 20px;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+.login-container > .container > .login-box > .login-content {
+  padding: 15px;
+}
+.login-container > .container > .login-box > .login-content form {
+  position: relative;
+}
+.login-container > .container > .login-box > .login-content form label {
+  font-weight: normal;
+  font-size: 17px;
+}
+.forgot-password {
+  flex-grow: 0;
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+  color: #00939f;
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+}
+.create-account {
+  color: #00939f;
+}
+.no-account {
+  flex-grow: 0;
+  font-family: Inter;
+  font-size: 18px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-align: left;
+  color: #171c26;
+  text-decoration: none;
+}
+.login-container > .container > .login-box > .login-content form .input-field {
+  margin-top: 5px;
+  margin-bottom: 30px;
 }
 .login-container > .container > .login-box > .login-content > .title {
   font-size: 40px;
@@ -70,7 +148,7 @@ html {
   > form
   > .submit-button {
   background-color: #00939f;
+  margin-top: 50px;
+  font-size: 20px;
 }
-.login-container > .container > .login-box > .login-content > .input-field {
-  /* margin-bottom: 15px; */
-}
+

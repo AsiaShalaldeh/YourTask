@@ -9,10 +9,7 @@ import {
   IconButton,
   InputAdornment,
 } from "@mui/material";
-import {
-  Visibility,
-  VisibilityOff,
-} from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import "./login.form.css";
 
 function LoginForm() {
@@ -28,27 +25,25 @@ function LoginForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
       const response = await axios.post("http://127.0.0.1:8000/login/", {
         email: email,
         password: password,
       });
-  
+
       const data = response.data;
-  
+
       const accessToken = data.access_token;
       localStorage.clear();
       localStorage.setItem("access_token", accessToken);
       localStorage.setItem("refresh_token", data.refresh_token);
-      console.log(accessToken);
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${accessToken}`;
-  
-      // Store the image in local storage
-      localStorage.setItem("user_image", data.user_image);
-  
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+      if (data.user_image) {
+        localStorage.setItem("user_image", data.user_image);
+      }
+
       navigate("/tasks", { replace: true });
     } catch (error) {
       setError(error.response.data.message);
@@ -108,8 +103,10 @@ function LoginForm() {
                   {error}
                 </Typography>
               )}
-              <Typography align="center" sx={{ marginTop: "20px" }}>
-                <Link to="/send-reset-code">نسيت كلمة المرور؟</Link>
+              <Typography>
+                <Link to="/send-reset-code">
+                  <p className="forgot-password">نسيت كلمة المرور؟</p>
+                </Link>
               </Typography>
               <Button
                 className="submit-button"
@@ -121,7 +118,10 @@ function LoginForm() {
               </Button>
             </form>
             <Typography align="center" sx={{ marginTop: "20px" }}>
-              ليس لديك حساب؟ <Link to="/register">إنشاء حساب</Link>
+              <span className="no-account">ليس لديك حساب؟</span>
+              <Link to="/register" className="no-account">
+                &nbsp;<span className="create-account">إنشاء حساب</span>
+              </Link>
             </Typography>
           </div>
         </div>
@@ -131,8 +131,10 @@ function LoginForm() {
           src={process.env.PUBLIC_URL + "images/sign_in.png"}
           alt="أهلا بك"
         />
-        <h1>مرحبا بك في موقع مهمتك</h1>
-        <p>مهمتك هو عبارة عن موقع إلكتروني يساعدك في إنجاز مهامك بسهولة</p>
+        <h1 className="title inter-custom">مرحبا بك في موقع مهمتك</h1>
+        <p className="desc">
+          مهمتك هو عبارة عن موقع إلكتروني يساعدك في إنجاز مهامك بسهولة
+        </p>
       </div>
     </div>
   );

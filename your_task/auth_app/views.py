@@ -56,10 +56,12 @@ def register(request):
                 user = User.objects.get(email=email)
                 image_file = request.FILES.get('avatar')
 
+                user_image_path = None
                 # Check if an image file was provided
                 if image_file:
                     user_image = UserImage(image=image_file, user=user, caption="Profile Image")
                     user_image.save()
+                    user_image_path = user_image.image.url
 
                 # User authenticated successfully
                 access_token = AccessToken.for_user(user)
@@ -68,7 +70,7 @@ def register(request):
                 return Response({
                         "access_token" : str(access_token),
                         "refresh_token" : str(refresh_token),
-                        # 'user_image': user_image_path
+                        'user_image': user_image_path
                     }, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -89,7 +91,6 @@ def login(request):
                 # Authenticate user
                 entered_user = User.objects.filter(email=email).first()
                 user = authenticate(username=entered_user.username, password=password)
-                # user = User.objects.get(email=email)
                 if user is not None:
                     # User authenticated successfully
                     access_token = AccessToken.for_user(user)

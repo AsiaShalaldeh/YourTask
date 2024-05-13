@@ -18,6 +18,7 @@
   flex: 1 1 auto;
   max-width: 50%;
   text-align: center;
+  padding: 20px;
 }
 .image-container img {
   max-width: 100%;
@@ -37,11 +38,13 @@
   max-width: 60%;
 }
 .verify-container > .verify-form {
-  /* height: 100%; */
   padding: 20px;
   font-size: 20px;
   font-weight: bold;
-  display: table;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .verify-container > .verify-form > .title {
   font-size: 40px;
@@ -49,4 +52,53 @@
 }
 .verify-container > .verify-form > .submit-button {
   background-color: #00939f;
+  font-size: 20px;
+}
+h1 {
+  text-align: center;
+  font-size: 33px;
+}
+.instr {
+  font-size: 17px;
+  color: #7b7b7b;
+  align-self: flex-start;
+}
+.container {
+  flex-wrap: wrap;
+  margin-bottom: 100px;
+  width: 100%;
+  margin: 0 0 40px 0;
+}
+.character {
+  border-color: grey;
+  border-radius: 5px;
+  font-size: 20px;
+  font-weight: normal;
+  padding: 5px 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 80px;
+}
+.character--inactive {
+  background-color: #f3f3f3;
+}
+.resend-button {
+  border: none;
+  background-color: transparent;
+  color: #00939f;
+  font-size: 16px;
+}
+.resend-icon {
+  color: #00939f;
+  margin-bottom: -5px;
+}
+.resend {
+  margin-bottom: 20px;
+}
+.login-link {
+  flex-grow: 0;
+  text-align: center;
+  text-decoration: none;
+  color: #00939f;
 }
