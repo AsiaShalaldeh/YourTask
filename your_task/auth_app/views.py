@@ -89,8 +89,11 @@ def login(request):
             password = serializer.validated_data.get('password')
             try:
                 # Authenticate user
+                username = None
                 entered_user = User.objects.filter(email=email).first()
-                user = authenticate(username=entered_user.username, password=password)
+                if entered_user is not None:
+                    username = entered_user.username
+                user = authenticate(username=username, password=password)
                 if user is not None:
                     # User authenticated successfully
                     access_token = AccessToken.for_user(user)

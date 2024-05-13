@@ -44,7 +44,7 @@ function LoginForm() {
         localStorage.setItem("user_image", data.user_image);
       }
 
-      navigate("/tasks", { replace: true });
+      navigate("/home", { replace: true });
     } catch (error) {
       setError(error.response.data.message);
     }
@@ -105,7 +105,7 @@ function LoginForm() {
               )}
               <Typography>
                 <Link to="/send-reset-code">
-                  <p className="forgot-password">نسيت كلمة المرور؟</p>
+                  <span className="forgot-password">نسيت كلمة المرور؟</span>
                 </Link>
               </Typography>
               <Button

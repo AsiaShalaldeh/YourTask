@@ -7,15 +7,16 @@ import { useNavigate } from "react-router-dom";
 function Navbar() {
   const navigate = useNavigate();
   const [image, setImage] = useState("");
+  const [showLogout, setShowLogout] = useState(false);
 
   useEffect(() => {
-    console.log(image)
-    setImage(localStorage.getItem("user_image"));
+    console.log(image);
+    const img = localStorage.getItem("user_image");
+    if (img !== null) setImage(img);
   }, []);
 
   const handleLogout = async () => {
     try {
-      // Make a POST request to the logout endpoint
       await axios.post(
         "http://127.0.0.1:8000/logout/",
         {
@@ -38,21 +39,48 @@ function Navbar() {
         <img src={process.env.PUBLIC_URL + "/images/logo.svg"} alt="Logo" />
       </div>
       <div>
-        {image === "" ? (
-          <img
-            width={70}
-            height={70}
-            src={process.env.PUBLIC_URL + "images/profile.jpg"}
-            alt="User Profile"
-          />
-        ) : (
-          <img src={image} alt="Profile" />
-        )}
-      </div>
-      <div>
-        <button className="logout" onClick={handleLogout}>
-          Logout
-        </button>
+        <div style={{ position: "relative" }} className="profile-container">
+          {image === "" ? (
+            <img
+              className="user-image"
+              src={process.env.PUBLIC_URL + "/images/profile.png"}
+              alt="User Profile"
+              style={{ cursor: "pointer" }}
+            />
+          ) : (
+            <img
+              src={image}
+              alt="Profile"
+              className="user-image"
+              style={{ cursor: "pointer" }}
+            />
+          )}
+          <span className="arrow" onClick={() => setShowLogout(!showLogout)}>
+            &#11167;
+          </span>
+          {showLogout && (
+            <div
+              style={{
+                position: "absolute",
+                top: "100%",
+                right: 0,
+                backgroundColor: "#fff",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.1)",
+                zIndex: 1,
+              }}
+            >
+              <button
+                className="logout"
+                onClick={handleLogout}
+                style={{ padding: "8px 12px" }}
+              >
+                تسجيل الخروج
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );

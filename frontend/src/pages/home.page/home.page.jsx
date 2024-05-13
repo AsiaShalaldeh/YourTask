@@ -5,10 +5,9 @@ import "./home.page.css";
 import Navbar from "../../components/nav.component/nav.component";
 
 function HomePage() {
-
   return (
     <div className="home-container">
-      <Navbar/> 
+      <Navbar />
       <div className="body">
         <h2>
           لا يوجد مهام حتى الآن
@@ -16,7 +15,8 @@ function HomePage() {
         </h2>
         <Link to="/tasks" className="link">
           <button className="add-task">
-            <FiPlus /> Add Tasks
+            <span>إضافة مهمة</span>
+            <FiPlus />
           </button>
         </Link>
         <div className="image">
