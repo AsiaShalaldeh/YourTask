@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FiFilter } from "react-icons/fi";
-import { FiPlus } from "react-icons/fi";
+import { FiPlus, FiSearch } from "react-icons/fi";
 import {
   Box,
   Button,
   Container,
   InputAdornment,
   TextField,
-  Typography,
+  IconButton,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import TaskFormModal from "../../components/task.form.modal/task.form.modal";
 import Navbar from "../../components/nav.component/nav.component";
@@ -16,6 +18,7 @@ import TaskList from "../../components/task.list.component/task.list.component";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import TaskFilter from "../../components/filter.component/filter.component";
+import "./task.page.css";
 
 function TasksPage() {
   const [tasks, setTasks] = useState([]);
@@ -24,7 +27,7 @@ function TasksPage() {
   const [searchStatus, setSearchStatus] = useState("all");
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const tasksPerPage = 5;
+  const [tasksPerPage, setTasksPerPage] = useState(15);
 
   useEffect(() => {
     fetchTasks();
@@ -74,10 +77,6 @@ function TasksPage() {
   const handleFilterChange = (event) => {
     setSearchStatus(event.target.value);
   };
-
-  //   const handleSearchTextChange = (event) => {
-  //     setSearchText(event.target.value);
-  //   };
 
   const filteredTasks = tasks.filter((task) => {
     const statusMatch =
@@ -134,43 +133,57 @@ function TasksPage() {
     }
   };
 
+  const handleTasksPerPageChange = (event) => {
+    setTasksPerPage(event.target.value);
+    setCurrentPage(1);
+  };
+
   const indexOfLastTask = currentPage * tasksPerPage;
   const indexOfFirstTask = indexOfLastTask - tasksPerPage;
   const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
 
   return (
-    <div>
+    <div className="body-container">
       <Navbar />
-      <Container>
-        <Box mt={4}>
-          <Box display="flex" alignItems="center" mb={2}>
-            <TaskFilter
-              searchStatus={searchStatus}
-              handleSearchChange={handleFilterChange}
-            />
+      <div className="body">
+        <Container className="table">
+          <Box className="table-header">
+            <Box>
+              <TaskFilter
+                searchStatus={searchStatus}
+                handleSearchChange={handleFilterChange}
+              />
+            </Box>
+            <Box className="search-box">
+              <TextField
+                type="text"
+                placeholder="البحث"
+                value={searchText}
+                onChange={handleSearchTextChange}
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton>
+                        <FiSearch />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+            <Box>
+              <Button
+                variant="contained"
+                className="add-task"
+                onClick={handleAddTask}
+                endIcon={<FiPlus />}
+              >
+                <span>إضافة مهمة</span>
+              </Button>
+            </Box>
           </Box>
-          <Box mb={2}>
-            <TextField
-              type="text"
-              placeholder="Search by task title or description"
-              value={searchText}
-              onChange={handleSearchTextChange}
-              fullWidth
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Button
-                      variant="contained"
-                      onClick={handleAddTask}
-                      endIcon={<FiPlus style={{ marginRight: "15px" }} />}
-                    >
-                      Add Task
-                    </Button>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
+          {/* Add Tasks List */}
           <TaskList
             tasks={currentTasks}
             onEditTask={handleEditTask}
@@ -178,15 +191,29 @@ function TasksPage() {
             onStatusUpdate={handleChangeTaskStatus}
           />
           <Stack spacing={2} mt={2} justifyContent="center" alignItems="center">
+            <p>
+              1-{tasksPerPage} {tasks.length} of
+            </p>
+            {/* Select dropdown for choosing tasks per page */}
+            <span>عدد الصفوف في الصفحة</span>
+            <Select
+              value={tasksPerPage}
+              onChange={handleTasksPerPageChange}
+              variant="outlined"
+            >
+              <MenuItem value={5}>5</MenuItem>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={15}>15</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+            </Select>
             <Pagination
               count={Math.ceil(filteredTasks.length / tasksPerPage)}
               page={currentPage}
               onChange={handlePageChange}
-              color="primary"
             />
           </Stack>
-        </Box>
-      </Container>
+        </Container>
+      </div>
       {showModal && (
         <TaskFormModal
           onSave={handleSaveTask}

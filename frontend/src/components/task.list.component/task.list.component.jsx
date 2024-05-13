@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./task.list.component.css";
 import {
-  Box,
   Button,
   Dialog,
   DialogActions,
@@ -14,7 +13,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  IconButton,
+  Select,
+  MenuItem,
 } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { CheckCircle } from "@mui/icons-material";
 
 const TaskList = ({ tasks, onEditTask, onDeleteTask, onStatusUpdate }) => {
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
@@ -41,19 +46,27 @@ const TaskList = ({ tasks, onEditTask, onDeleteTask, onStatusUpdate }) => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>العنوان</TableCell>
-              <TableCell>الوصف</TableCell>
-              <TableCell>الحالة</TableCell>
-              <TableCell>العمليات</TableCell>
+              <TableCell></TableCell>
+              <TableCell className="head">#</TableCell>
+              <TableCell className="head">العنوان</TableCell>
+              <TableCell className="head">الوصف</TableCell>
+              <TableCell className="head">الحالة</TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {tasks.map((task) => (
+            {tasks.map((task, index) => (
               <TableRow key={task.task_id}>
+                {/* Display green check icon for completed tasks */}
+                <TableCell>
+                  {task.completed && <CheckCircle style={{ color: "green" }} />}
+                </TableCell>
+                <TableCell>{index + 1}</TableCell>
                 <TableCell>{task.title}</TableCell>
                 <TableCell>{task.description}</TableCell>
                 <TableCell>
-                  <select
+                  <Select
+                    className="select-status"
                     value={task.completed ? "completed" : "Not Completed"}
                     onChange={(e) => {
                       const updatedTask = {
@@ -63,24 +76,33 @@ const TaskList = ({ tasks, onEditTask, onDeleteTask, onStatusUpdate }) => {
                       };
                       onStatusUpdate(updatedTask);
                     }}
+                    style={{
+                      backgroundColor: task.completed ? "#b4ffb4" : "white",
+                      color: task.completed ? "black" : "black",
+                    }}
                   >
-                    <option value="completed">Completed</option>
-                    <option value="Not Completed">Not Completed</option>
-                  </select>
+                    <MenuItem className="completed" value="completed">
+                      مكتملة
+                    </MenuItem>
+                    <MenuItem value="Not Completed">غير مكتملة</MenuItem>
+                  </Select>
                 </TableCell>
                 <TableCell>
-                  <Button
-                    variant="outlined"
+                  {/* Edit button */}
+                  <IconButton
                     onClick={() => onEditTask(task.task_id, task)}
+                    aria-label="Edit"
                   >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outlined"
+                    <EditIcon />
+                  </IconButton>
+
+                  {/* Delete button */}
+                  <IconButton
                     onClick={() => handleDeleteConfirmationOpen(task.task_id)}
+                    aria-label="Delete"
                   >
-                    Delete
-                  </Button>
+                    <DeleteIcon />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

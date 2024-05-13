@@ -7,3 +7,40 @@
   height: 100px;
   margin: 20px auto;
 }
+#root > div > div > div > div:nth-child(2) > div > table > thead > tr > th {
+  font-weight: bold;
+  font-size: 15px;
+}
+#root
+  > div
+  > div
+  > div
+  > div
+  > div
+  > table
+  > tbody
+  > tr
+  > td:nth-child(5)
+  > div
+  > div {
+  padding: 3px 15px;
+}
+.select-status {
+  min-width: 100px;
+}
+.completed {
+  background-color: green;
+  color: green;
+}
+#root
+  > div
+  > div
+  > div
+  > div.MuiStack-root.css-15mzjw8-MuiStack-root
+  > nav
+  > ul
+  > li
+  > button {
+  background-color: #00939f;
+  color: white;
+}

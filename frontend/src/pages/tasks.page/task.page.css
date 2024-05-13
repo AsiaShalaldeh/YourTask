@@ -1,0 +1,86 @@
+.body {
+  background-color: #fafafa;
+  border-top: 1px solid #d9d9d9;
+}
+.body .table {
+  width: 70%;
+  background-color: white;
+  margin: 30px 0;
+  border: 1px solid #dbdbdb;
+  border-radius: 8px;
+}
+.table-header {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  justify-content: flex-start;
+  gap: 20px;
+}
+.search-box {
+  flex: 4;
+}
+/* CSS rules for mobile devices */
+@media screen and (max-width: 830px) {
+  .body .table {
+    min-width: 95%;
+  }
+  .table-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+#root
+  > div
+  > div
+  > div
+  > div.table-header.MuiBox-root.css-0
+  > div:nth-child(1)
+  > div
+  > div:nth-child(2)
+  > div
+  > div {
+  height: 40px;
+}
+#root
+  > div
+  > div
+  > div
+  > div.table-header.MuiBox-root.css-0
+  > div.search-box.MuiBox-root.css-0
+  > div
+  > div {
+  height: 40px;
+}
+#root
+  > div
+  > div
+  > div
+  > div.table-header.MuiBox-root.css-0
+  > div:nth-child(3)
+  > button {
+  background-color: #00939f;
+  padding: 7px 15px 7px 0;
+}
+#root
+  > div
+  > div
+  > div
+  > div.MuiStack-root.css-15mzjw8-MuiStack-root
+  > div
+  > div {
+  padding: 3px 30px 3px 10px;
+}
+#root > div > div > div > div.MuiStack-root.css-15mzjw8-MuiStack-root {
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 10px;
+}
+#root > div > div > div > div.MuiStack-root.css-15mzjw8-MuiStack-root > nav {
+  padding: 0;
+  margin: 0;
+}
+#root > div > div > div > div.MuiStack-root.css-15mzjw8-MuiStack-root > div,
+#root > div > div > div > div.MuiStack-root.css-15mzjw8-MuiStack-root > span {
+  margin: 0;
+}
+

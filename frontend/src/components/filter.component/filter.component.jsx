@@ -1,5 +1,12 @@
 import React from "react";
-import { FormControl, InputLabel, Select, MenuItem, Box, Grid } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Box,
+  Grid,
+} from "@mui/material";
 import { FiFilter } from "react-icons/fi";
 
 const TaskFilter = ({ searchStatus, handleSearchChange }) => {
@@ -16,9 +23,9 @@ const TaskFilter = ({ searchStatus, handleSearchChange }) => {
             value={searchStatus}
             onChange={handleSearchChange}
           >
-            <MenuItem value="all">All</MenuItem>
-            <MenuItem value="completed">Completed</MenuItem>
-            <MenuItem value="notcompleted">Not Completed</MenuItem>
+            <MenuItem value="all">عرض الجميع</MenuItem>
+            <MenuItem value="completed">عرض المكتمل</MenuItem>
+            <MenuItem value="notcompleted"> عرض غير المكتمل</MenuItem>
           </Select>
         </FormControl>
       </Grid>
