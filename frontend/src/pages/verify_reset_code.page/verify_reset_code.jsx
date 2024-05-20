@@ -18,6 +18,7 @@ function VerifyResetCode() {
 
   const handleSubmit = async () => {
     try {
+      console.log(email)
       const response = await axios.post(
         `http://127.0.0.1:8000/verify-reset-code/`,
         { email: email, code: code.split("").reverse().join("") }
@@ -25,8 +26,11 @@ function VerifyResetCode() {
       navigate("/reset-password", { replace: true });
       setSuccess(response.data.success);
     } catch (error) {
-      console.error(error);
-      setError(error.response.data.error);
+      if (error.response && error.response.data && error.response.data.error) {
+        setError(error.response.data.error);
+      } else {
+        setError("An error occurred. Please try again later.");
+      }
     }
   };
 
@@ -90,10 +94,7 @@ function VerifyResetCode() {
         {error && <Typography color="error">{error}</Typography>}
         {success && <Typography color="success">{success}</Typography>}
         <div className="resend">
-          <button
-            onClick={handleResendCode}
-            className="resend-button"
-          >
+          <button onClick={handleResendCode} className="resend-button">
             إعادة الإرسال
           </button>
           <Replay className="resend-icon" />

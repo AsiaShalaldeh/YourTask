@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { FiFilter } from "react-icons/fi";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import {
   Box,
@@ -11,6 +10,7 @@ import {
   IconButton,
   Select,
   MenuItem,
+  Typography,
 } from "@mui/material";
 import TaskFormModal from "../../components/task.form.modal/task.form.modal";
 import Navbar from "../../components/nav.component/nav.component";
@@ -141,6 +141,7 @@ function TasksPage() {
   const indexOfLastTask = currentPage * tasksPerPage;
   const indexOfFirstTask = indexOfLastTask - tasksPerPage;
   const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
+  const currentTaskCount = currentTasks.length;
 
   return (
     <div className="body-container">
@@ -191,21 +192,23 @@ function TasksPage() {
             onStatusUpdate={handleChangeTaskStatus}
           />
           <Stack spacing={2} mt={2} justifyContent="center" alignItems="center">
-            <p>
-              1-{tasksPerPage} {tasks.length} of
-            </p>
-            {/* Select dropdown for choosing tasks per page */}
-            <span>عدد الصفوف في الصفحة</span>
-            <Select
-              value={tasksPerPage}
-              onChange={handleTasksPerPageChange}
-              variant="outlined"
-            >
-              <MenuItem value={5}>5</MenuItem>
-              <MenuItem value={10}>10</MenuItem>
-              <MenuItem value={15}>15</MenuItem>
-              <MenuItem value={20}>20</MenuItem>
-            </Select>
+            <Typography className="tail">
+              {currentTaskCount} of {indexOfFirstTask + 1}-{indexOfLastTask} out
+              of {filteredTasks.length}
+            </Typography>
+            <div className="page-capacity">
+              <div>عدد الصفوف في الصفحة</div>
+              <Select
+                value={tasksPerPage}
+                onChange={handleTasksPerPageChange}
+                variant="outlined"
+              >
+                <MenuItem value={5}>5</MenuItem>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={15}>15</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+              </Select>
+            </div>
             <Pagination
               count={Math.ceil(filteredTasks.length / tasksPerPage)}
               page={currentPage}

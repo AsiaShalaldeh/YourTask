@@ -44,3 +44,8 @@
   background-color: #00939f;
   color: white;
 }
+body > div.MuiDialog-root.MuiModal-root.css-zw3mfo-MuiModal-root-MuiDialog-root > div.MuiDialog-container.MuiDialog-scrollPaper.css-hz1bth-MuiDialog-container > div > div.MuiDialogActions-root.MuiDialogActions-spacing.css-knqc4i-MuiDialogActions-root > button{
+  background-color: #00939f;
+  color: white;
+  margin-right: 10px;
+}

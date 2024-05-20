@@ -51,7 +51,11 @@ function LoginForm() {
         navigate("/home", { replace: true });
       }
     } catch (error) {
-      setError(error.response.data.message);
+      if (error.response && error.response.data) {
+        setError(error.response.data.error || error.response.data.message);
+      } else {
+        setError("An error occurred. Please try again later.");
+      }
     }
   };
 

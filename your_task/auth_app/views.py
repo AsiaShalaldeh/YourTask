@@ -67,13 +67,11 @@ def register(request):
                 # User authenticated successfully
                 access_token = AccessToken.for_user(user)
                 refresh_token = RefreshToken.for_user(user)
-                has_task = has_tasks(user=user)
                 
                 return Response({
                         "access_token" : str(access_token),
                         "refresh_token" : str(refresh_token),
                         'user_image': user_image_path,
-                        "has_task": has_task
                     }, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -156,6 +154,8 @@ def send_reset_code(request):
         serializer = ResetCodeSerializer(data=request.data)
         if serializer.is_valid():
             email = serializer.validated_data['email']
+        else:
+            return Response({'error': 'Email is required'}, status=400)
         if not User.objects.filter(email=email, is_active=True).exists():
             return Response({'error': f'البريد الإلكتروني غير موجود. {email} '}, status=status.HTTP_400_BAD_REQUEST)
         password_reset, created = PasswordReset.objects.get_or_create(email=email)
@@ -178,6 +178,7 @@ def send_reset_code_email(password_reset):
 def verify_reset_code(request):
     if request.method == 'POST':
         serializer = VerifyResetCodeSerializer(data=request.data)
+        
         if serializer.is_valid():
             email = serializer.validated_data['email']
             code = serializer.validated_data['code']
@@ -190,7 +191,7 @@ def verify_reset_code(request):
             else:
                 return Response({'success': 'الرمز صحيح'}, status=status.HTTP_200_OK) 
         else:
-            return Response(serializer.errors, status=400)
+            return Response({'error': 'Email and code are required'}, status=400)
     else:
         return Response({'error': 'Method not allowed'}, status=405)
 
@@ -216,7 +217,7 @@ def reset_password(request):
 
             return Response({'success': 'Password reset successful'}, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors, status=400)
+            return Response({'error': 'Email and code are required'}, status=400)
 
     return Response({'error': 'Method not allowed'}, status=405)
 

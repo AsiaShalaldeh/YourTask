@@ -7,6 +7,7 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
+import './task.form.modal.css'
 
 function TaskFormModal({ onSave, onCancel, task }) {
   const [formData, setFormData] = useState({
@@ -29,7 +30,7 @@ function TaskFormModal({ onSave, onCancel, task }) {
 
   return (
     <Dialog open={true} onClose={onCancel}>
-      <DialogTitle>{task ? "Edit Task" : "Add Task"}</DialogTitle>
+      <DialogTitle>{task ? "تعديل المهمة" : "إضافة مهمة"}</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <TextField
@@ -37,25 +38,31 @@ function TaskFormModal({ onSave, onCancel, task }) {
             margin="dense"
             id="title"
             name="title"
-            label="Title"
+            label="العنوان"
             type="text"
             fullWidth
             value={formData.title}
             onChange={handleChange}
+            InputProps={{
+              style: { direction: "rtl" }
+            }}
+            InputLabelProps={{
+              style: { direction: "rtl" }
+            }}
           />
           <TextField
             margin="dense"
             id="description"
             name="description"
-            label="Description"
+            label="الوصف"
             type="text"
             fullWidth
             value={formData.description}
             onChange={handleChange}
           />
           <DialogActions>
-            <Button type="submit">{task ? "Save" : "Add"}</Button>
-            <Button onClick={onCancel}>Cancel</Button>
+            <Button onClick={onCancel}>إلغاء العملية</Button>
+            <Button type="submit">{task ? "حفظ" : "إضافة"}</Button>
           </DialogActions>
         </form>
       </DialogContent>

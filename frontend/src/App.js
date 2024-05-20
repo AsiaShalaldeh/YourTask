@@ -10,6 +10,7 @@ import { EmailProvider } from "./components/providers/email.provider";
 import ResetPassword from "./pages/reset-password.page/reset-password";
 import { Navigate } from "react-router-dom";
 import Navbar from "./components/nav.component/nav.component";
+import ProtectedRoute from "./components/protected.hook/protected.route";
 
 function App() {
   return (
@@ -18,10 +19,10 @@ function App() {
         <Routes>
           <Route path="/*" element={<Navigate to="/login" replace />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/home" element={<ProtectedRoute><HomePage/></ProtectedRoute>} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/tasks" element={<TasksPage />} />
+          <Route path="/tasks" element={<ProtectedRoute><TasksPage/></ProtectedRoute>} />
           <Route path="/tasks/:id" element={<TasksPage />} />
           <Route path="/send-reset-code" element={<SendResetCode />} />
           <Route path="/verify-reset-code" element={<VerifyResetCode />} />

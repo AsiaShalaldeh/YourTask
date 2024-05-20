@@ -1,0 +1,23 @@
+body{
+    direction: rtl;
+}
+body
+  > div.MuiDialog-root.MuiModal-root.css-zw3mfo-MuiModal-root-MuiDialog-root
+  > div.MuiDialog-container.MuiDialog-scrollPaper.css-hz1bth-MuiDialog-container
+  > div {
+  padding: 30px 0;
+}
+body
+  > div.MuiDialog-root.MuiModal-root.css-zw3mfo-MuiModal-root-MuiDialog-root
+  > div.MuiDialog-container.MuiDialog-scrollPaper.css-hz1bth-MuiDialog-container
+  > div
+  > div
+  > form
+  > div.MuiDialogActions-root.MuiDialogActions-spacing.css-knqc4i-MuiDialogActions-root
+  > button {
+  background-color: #00939f;
+  color: white;
+  margin-right: 10px;
+  margin-top: 30px;
+  margin-left: 0;
+}
