@@ -10,7 +10,7 @@ import VerificationInput from "react-verification-input";
 
 function VerifyResetCode() {
   const navigate = useNavigate();
-  const [setMessage] = useState("");
+  const [message, setMessage] = useState("");
   const { email: email, setTempEmail } = useEmail();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");

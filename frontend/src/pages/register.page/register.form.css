@@ -102,3 +102,7 @@ input[type="file"] {
   text-decoration: none;
   color: #00939f;
 }
+#root > div > div.register-box > div > form > div{
+  margin-top: 5px;
+  margin-bottom: 20px;
+}

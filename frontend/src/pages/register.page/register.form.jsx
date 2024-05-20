@@ -93,7 +93,7 @@ function RegistrationForm() {
           >
             إنشاء حساب
           </Typography>
-          <form onSubmit={handleSubmit}>
+          <form>
             <label>اسم المستخدم</label>
             <TextField
               variant="outlined"
@@ -151,18 +151,23 @@ function RegistrationForm() {
                 alt="User Profile"
               />
               <div className="fileUpload btn btn-primary">
-                <button className="upload-image">
+                <div className="upload-image">
+                  <label htmlFor="avatar-upload" className="custom-file-upload">
+                    إرفاق صورة
+                  </label>
                   <input
+                    id="avatar-upload"
                     name="Image"
                     type="file"
                     accept="image/*"
                     onChange={handleFileChange}
+                    style={{ display: "none" }}
                   />
-                  إرفاق صورة
-                </button>
+                </div>
               </div>
             </div>
             <Button
+              onClick={handleSubmit}
               type="submit"
               variant="contained"
               fullWidth
@@ -174,7 +179,10 @@ function RegistrationForm() {
             {error && <Typography color="error">{error}</Typography>}
           </form>
           <Typography align="center" sx={{ marginTop: "20px" }}>
-            &nbsp;هل لديك حساب بالفعل؟ <Link to="/login" className="login-link"><span>تسجيل الدخول</span></Link>
+            &nbsp;هل لديك حساب بالفعل؟{" "}
+            <Link to="/login" className="login-link">
+              <span>تسجيل الدخول</span>
+            </Link>
           </Typography>
         </div>
       </div>
