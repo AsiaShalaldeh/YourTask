@@ -56,7 +56,12 @@ function RegistrationForm() {
         localStorage.setItem("user_image", data.user_image);
       }
 
-      navigate("/home", { replace: true });
+      // Navigate based on has_task value
+      if (data.has_task) {
+        navigate("/tasks", { replace: true });
+      } else {
+        navigate("/home", { replace: true });
+      }
     } catch (error) {
       if (error.response && error.response.data && error.response.data.error) {
         console.error("Registration error:", error.response.data.error);

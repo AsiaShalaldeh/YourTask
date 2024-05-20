@@ -22,6 +22,7 @@ from .models import UserImage
 from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from todo.models import Task
 
 from .serializers import UserSerializer, ResetCodeSerializer, LoginSerializer, VerifyResetCodeSerializer, ResetPasswordSerializer
 from .models import PasswordReset
@@ -66,11 +67,13 @@ def register(request):
                 # User authenticated successfully
                 access_token = AccessToken.for_user(user)
                 refresh_token = RefreshToken.for_user(user)
+                has_task = has_tasks(user=user)
                 
                 return Response({
                         "access_token" : str(access_token),
                         "refresh_token" : str(refresh_token),
-                        'user_image': user_image_path
+                        'user_image': user_image_path,
+                        "has_task": has_task
                     }, status=status.HTTP_200_OK)
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -104,11 +107,14 @@ def login(request):
                     user_image = UserImage.objects.filter(user=user).first()
                     if user_image:
                         user_image_path = user_image.image.url
+                    
+                    has_task = has_tasks(user=user)
 
                     return Response({
                         "access_token" : str(access_token),
                         "refresh_token" : str(refresh_token),
-                        'user_image': user_image_path
+                        'user_image': user_image_path,
+                        "has_task": has_task
                     }, status=status.HTTP_200_OK)
                 else:
                     # Authentication failed
@@ -213,3 +219,16 @@ def reset_password(request):
             return Response(serializer.errors, status=400)
 
     return Response({'error': 'Method not allowed'}, status=405)
+
+
+def has_tasks(user):
+    """
+    Check if the user has any tasks.
+
+    Args:
+        user (User): The user to check tasks for.
+
+    Returns:
+        bool: True if the user has tasks, False otherwise.
+    """
+    return Task.objects.filter(user=user).exists()

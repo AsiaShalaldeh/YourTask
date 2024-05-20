@@ -35,7 +35,7 @@ function Navbar() {
 
   return (
     <nav>
-      <div>
+      <div className="logo">
         <img src={process.env.PUBLIC_URL + "/images/logo.svg"} alt="Logo" />
       </div>
       <div>
